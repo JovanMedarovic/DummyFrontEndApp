@@ -1,0 +1,41 @@
+name: Deploy to AWS (S3 + CloudFront)
+
+on:
+  push:
+    branches: [ "main" ]   # pokreće se na svaki push u main granu
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write       # obavezno za OIDC
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Install dependencies and build app
+        run: |
+          npm ci
+          npm run build         # kreira ./dist folder (vite default)
+
+      - name: Configure AWS credentials via OIDC
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::703671933081:role/Release
+          aws-region: eu-central-1
+
+      - name: Upload to S3 bucket
+        run: |
+          aws s3 sync dist s3://endava-test-001 --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation --distribution-id E25ASY16PRS4VF --paths "/*"
+
