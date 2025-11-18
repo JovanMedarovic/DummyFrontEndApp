@@ -6,7 +6,7 @@ on:
       - main
 
 permissions:
-  id-token: write # granted permission for genereting OIDC token
+  id-token: write # granted permission for generating OIDC token
   contents: read # granted permission for reading repo
 
 jobs:
