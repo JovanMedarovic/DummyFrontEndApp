@@ -21,18 +21,18 @@ jobs:
         with:
           node-version: 24
 
-      - name: Build project #running clean install and build comands in orter to creating new /dist production files
+      - name: Build project #running clean install and build commands in order to creating new /dist production files
         run: |
           npm ci
           npm run build
 
-      - name: Configure AWS credentials # OIDC connnecting with AWS
+      - name: Configure AWS credentials # OIDC connecting with AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
-      - name: Deploy to S3 (sync dist → bucket) # pushing brand new changies to the S3 and deleting the old version
+      - name: Deploy to S3 (sync dist → bucket) # pushing brand new changes to the S3 and deleting the old version
         run: |
           aws s3 sync ./dist s3://${{ vars.AWS_S3_BUCKET }} --delete
 
