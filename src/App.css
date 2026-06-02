@@ -5,34 +5,80 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.status {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1em;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.status.error {
+  color: #ff6b6b;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  text-align: left;
+  margin-top: 1.5rem;
 }
 
-.card {
-  padding: 2em;
+.post-card {
+  background-color: #1a1a1a;
+  border: 1px solid rgba(100, 108, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  position: relative;
+}
+
+.post-card:hover {
+  border-color: #646cff;
+  box-shadow: 0 0 12px rgba(100, 108, 255, 0.2);
+}
+
+.post-id {
+  font-size: 0.75em;
+  font-weight: 600;
+  color: #646cff;
+  letter-spacing: 0.05em;
+}
+
+.post-title {
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0.4rem 0 0.75rem;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: capitalize;
+}
+
+.post-body {
+  font-size: 0.875em;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+@media (prefers-color-scheme: light) {
+  .post-card {
+    background-color: #f9f9f9;
+    border-color: rgba(100, 108, 255, 0.15);
+  }
+
+  .post-card:hover {
+    border-color: #646cff;
+    box-shadow: 0 0 12px rgba(100, 108, 255, 0.15);
+  }
+
+  .post-title {
+    color: #213547;
+  }
+
+  .post-body {
+    color: rgba(33, 53, 71, 0.6);
+  }
+
+  .status {
+    color: rgba(33, 53, 71, 0.6);
+  }
 }
