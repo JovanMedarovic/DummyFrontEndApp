@@ -18,7 +18,7 @@ function App() {
         if (!res.ok) throw new Error('Failed to fetch posts')
         return res.json()
       })
-      .then((data: Post[]) => setPosts(data.slice(0, 20)))
+      .then((data: Post[]) => setPosts(data.slice(0, 24)))
       .catch((err: Error) => setError(err.message))
       .finally(() => setLoading(false))
   }, [])
