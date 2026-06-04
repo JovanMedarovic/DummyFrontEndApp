@@ -25,7 +25,7 @@ function App() {
 
   return (
     <>
-      <h1>Postss</h1>
+      <h1>Posts</h1>
 
       {loading && <p className="status">Loading posts...</p>}
       {error && <p className="status error">{error}</p>}
