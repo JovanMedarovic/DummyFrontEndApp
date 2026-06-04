@@ -1,0 +1,43 @@
+name: Deploy to S3 via CloudFront (OAC)
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write # granted permission for generating OIDC token
+  contents: read # granted permission for reading repo
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # VM: ubuntu as Runtime environment
+    steps:
+      - name: Checkout # pulling repo content into ubuntu runtime
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js # setup node-a 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Build project #running clean install and build commands in order to creating new /dist production files
+        run: |
+          npm ci
+          npm run build
+
+      - name: Configure AWS credentials # OIDC connecting with AWS
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Deploy to S3 (sync dist → bucket) # pushing brand new changes to the S3 and deleting the old version
+        run: |
+          aws s3 sync ./dist s3://${{ vars.AWS_S3_BUCKET }} --delete
+
+      - name: Invalidate CloudFront cache # deleting cache from CF and forcing CF to show latest version from S3
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ vars.AWS_CF_DISTRIBUTION_ID }} \
+            --paths "/*"
